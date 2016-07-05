@@ -41,8 +41,8 @@ function myct_install() {
  */
 function myct_uninstall() {
   variable_del('blog_block_count');
-  //if (db_table_exists('job_table')) {
-  //  db_drop_table('job_table');
-  //}
+  if (db_table_exists('job_table')) {
+    db_drop_table('job_table');
+  }
 
 }

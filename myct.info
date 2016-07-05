@@ -1,6 +1,6 @@
-name = MYCT
-description = Enables multi-user blogs.
-;package = Core
-;version = VERSION
+name = Тип материала "Досье"
+description = Добавляет на сайт тип материала "Досье".
+package = INITLAB
+version = 1.0-dev
 core = 7.x
 
