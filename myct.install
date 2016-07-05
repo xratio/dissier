@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the blog module.
+ */
+
+function myct_schema() {
+if(db_table_exists('job_table') == FALSE) {
+    $schema['job_table'] = array(
+      'description' => 'job position',
+        'fields' => array(
+            'nid' => array(
+                  'description' => 'table nid',
+                  'type' => 'serial',
+                  'not null' => TRUE,
+            ),
+            'job_position' => array(
+                'type' => 'varchar',
+                'length' => 255,
+            ),
+        ),
+        'primary key' => array('nid'),
+    );
+    return $schema;
+}
+}
+
+/**
+ * Implements hook_install().
+ */
+function myct_install() {
+  // Ensure the blog node type is available.
+  node_types_rebuild();
+  $types = node_type_get_types();
+  node_add_body_field($types['myct']);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function myct_uninstall() {
+  variable_del('blog_block_count');
+  //if (db_table_exists('job_table')) {
+  //  db_drop_table('job_table');
+  //}
+
+}
