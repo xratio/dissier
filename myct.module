@@ -78,4 +78,38 @@ function myct_node_view($node, $view_mode, $langcode) {
     '#weight' => 2,
     //'#theme' => 'item_list',
   );
+
+  if (drupal_is_front_page() && $view_mode == 'teaser'){
+$form = drupal_get_form('myct_form', $node);
+$node->content['data_collection_form'] = array(
+  '#markup' => drupal_render($form),
+  '#weight' => 10,
+);
+}
+}
+
+function myct_form($form, &$form_state, $node) {
+	$nid = $node->nid;
+    $form['actions']['delete'] = array(
+      '#type' => 'submit',
+      '#value' => t('Delete'),
+      '#weight' => 15,
+      '#submit' => array('myct_form_delete_submit'),
+    );
+	
+	 $form['nid'] = array(
+      '#value' => $nid,
+      '#type' => 'hidden',
+    );
+  return $form;
+  }
+
+function myct_form_delete_submit($form, &$form_state) {
+    $nid = $form_state['values']['nid'];
+    $node = node_load($form_state['values']['nid']);
+    node_delete($nid);
+    cache_clear_all();
+    watchdog('content', '@type: deleted %title.', array('@type' => $node->type, '%title' => $node->title));
+    drupal_set_message(t('@type %title has been deleted.', array('@type' => node_type_get_name($node), '%title' => $node->title)));
+	drupal_goto('/');
 }
